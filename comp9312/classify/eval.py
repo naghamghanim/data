@@ -170,6 +170,9 @@ def main(args):
     segments, _ = classifier.eval(eval_dataloader)
     classifier.save_predictions(segments, "predictions.csv")
 
+    # ADD:
+    classifier.compute_metrics(segments)
+
     return
 
 
