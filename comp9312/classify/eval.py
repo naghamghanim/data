@@ -29,7 +29,7 @@ def parse_args():
     parser.add_argument(
         "--test_path", type=str, required=True, help="Path to training data",
     )
-      parser.add_argument(
+    parser.add_argument(
         "--eval_path", type=str, required=True, help="Path to eval data",
     )
     
