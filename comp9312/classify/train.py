@@ -3,6 +3,7 @@ import os
 import argparse
 import logging
 import sys
+import pickle
 from torch.utils.data import DataLoader
 from comp9312.classify.model import BertClassifier
 from comp9312.classify.trainer import BertTrainer
