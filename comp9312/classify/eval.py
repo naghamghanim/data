@@ -28,6 +28,16 @@ def parse_args():
     parser.add_argument(
         "--test_path", type=str, required=True, help="Path to training data",
     )
+      parser.add_argument(
+        "--eval_path", type=str, required=True, help="Path to eval data",
+    )
+    
+     parser.add_argument(
+        "--checkpoint_path", type=str, required=True, help="Path to checkpoints data",
+    )
+
+
+
 
     parser.add_argument(
         "--gpus", type=int, nargs="+", default=[0], help="GPU IDs to train on",
@@ -83,12 +93,9 @@ def main(args):
     # (args.train_path, )
     # datasets[0]
     # vocab is not important, ignore vocab variable
-    datasets, vocab = parse_data_files((args.train_path, args.val_path, args.test_path))
+    datasets, vocab = parse_data_files((args.eval_path))
     
-    # ** In train.py you need to save vocab:
-    with open(os.path.join(args.output_path, "tag_vocab.pkl"), "wb") as fh:
-        pickle.dump(vocab, fh)
-
+ 
     # In eval.py
     with open(os.path.join(args.checkpoint_path, "tag_vocab.pkl"), "rb") as fh:
         vocab = pickle.load(fh)
@@ -105,7 +112,7 @@ def main(args):
     shuffle = (True, False, False)
     # CHANGE:
     # eval_dataloader only (return value)
-    train_dataloader, val_dataloader, test_dataloader = [DataLoader(
+    eval_dataloader = [DataLoader(
         dataset=dataset,
         shuffle=shuffle[i],
         batch_size=args.batch_size,
@@ -120,7 +127,7 @@ def main(args):
     # - Load vocabs (we need to save vocab during training)
     # - In train.py
     model = BertClassifier(
-        bert_model=args.bert_model, num_labels=len(vocab), dropout=0.1
+        bert_model=args.bert_model, num_labels=len(vocab)
     )
 
     # ADD:
@@ -140,7 +147,7 @@ def main(args):
 
     # Initialize the optimizer
     # REMOVE
-    optimizer = torch.optim.AdamW(lr=args.learning_rate, params=model.parameters())
+   # optimizer = torch.optim.AdamW(lr=args.learning_rate, params=model.parameters())
 
     # Initialize the loss function
     loss = torch.nn.CrossEntropyLoss()
@@ -154,17 +161,13 @@ def main(args):
     # - Remove max_epochs
     classifier = BertTrainer(
         model=model,
-        optimizer=optimizer,
-        loss=loss,
-        train_dataloader=train_dataloader,
-        val_dataloader=val_dataloader,
-        test_dataloader=test_dataloader,
+       loss=loss,
+       eval_dataloader=eval_dataloader,
         output_path=args.output_path,
-        max_epochs=args.max_epochs,
     )
 
     # Remove
-    classifier.train()
+    #classifier.train()
 
     # ADD:
     segments, _ = classifier.eval(eval_dataloader)
