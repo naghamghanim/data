@@ -32,13 +32,9 @@ def parse_args():
     parser.add_argument(
         "--eval_path", type=str, required=True, help="Path to eval data",
     )
-    
-     parser.add_argument(
+    parser.add_argument(
         "--checkpoint_path", type=str, required=True, help="Path to checkpoints data",
     )
-
-
-
 
     parser.add_argument(
         "--gpus", type=int, nargs="+", default=[0], help="GPU IDs to train on",
