@@ -84,6 +84,7 @@ class BertTrainer:
                 "micro": mi_recall
             }
         }
+        print(metrics)
 
         return metrics
 
