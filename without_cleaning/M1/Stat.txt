@@ -1,0 +1,13 @@
+train
+Positive    865
+Negative    542
+
+
+test
+Positive    324
+Negative    179
+
+
+val
+Positive    65
+Negative    35
