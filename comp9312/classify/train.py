@@ -65,13 +65,13 @@ def parse_args():
 
 
 def main(args):
-    logging.basicConfig(
-        level=logging.INFO,
-        handlers=[logging.StreamHandler(sys.stdout)],
-        format="%(levelname)s\t%(name)s\t%(asctime)s\t%(message)s",
-        datefmt="%a, %d %b %Y %H:%M:%S",
-        force=True
-    )
+   logger = logging.getLogger('')
+    logger.setLevel(logging.INFO)
+    fh = logging.FileHandler(os.path.join(args.output_path, "train.log"))
+    formatter = logging.Formatter('[%(asctime)s] %(levelname)s [%(filename)s.%(funcName)s:%(lineno)d] %(message)s', datefmt='%a, %d %b %Y %H:%M:%S')
+    fh.setFormatter(formatter)
+    logger.addHandler(sh)
+
 
     # Set the seed for randomization
     set_seed(args.seed)
