@@ -65,11 +65,11 @@ def parse_args():
 
 
 def main(args):
-   logger = logging.getLogger('')
+     logger = logging.getLogger('')
     logger.setLevel(logging.INFO)
-    fh = logging.FileHandler(os.path.join(args.output_path, "train.log"))
+    sh = logging.StreamHandler(sys.stdout)
     formatter = logging.Formatter('[%(asctime)s] %(levelname)s [%(filename)s.%(funcName)s:%(lineno)d] %(message)s', datefmt='%a, %d %b %Y %H:%M:%S')
-    fh.setFormatter(formatter)
+    sh.setFormatter(formatter)
     logger.addHandler(sh)
 
 
