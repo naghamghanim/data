@@ -84,8 +84,6 @@ class BertTrainer:
                 "micro": mi_recall
             }
         }
-        print(metrics)
-
         return metrics
 
     def save_predictions(self, segments, output_filename):
