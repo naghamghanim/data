@@ -36,6 +36,24 @@ class BertTrainer:
         self.patience = patience
         self.timestep = 0
         self.epoch = 0
+    
+    def yield_tokens(file_path):
+      file_path="/content/data/models2/M5/train.csv"
+      with io.open(file_path, encoding = 'utf-8') as f:
+        for line in f:
+          yield line.strip().split()
+      vocab = build_vocab_from_iterator(yield_tokens(file_path), specials=["<unk>"]) 
+      logger.info(vocab)  
+      print(vocab)
+      return vocab    
+        
+    def save_vocab(vocab, path):
+      vocab=yield_tokens("test")
+      outputpath="/content/output"
+      path=os.path.join(outputpath, "tag_vocab.pkl") 
+      output = open(path, 'wb')
+      pickle.dump(vocab, output)
+      output.close()    
 
     def save(self):
         """
@@ -52,24 +70,12 @@ class BertTrainer:
 
         logger.info("Saving checkpoint to %s", filename)
         torch.save(checkpoint, filename)
+        save_vocab("","")
+
+   
+      
         
-    def save_vocab(vocab, path):
-      outputpath="/content/output"
-      path=os.path.join(outputpath, "tag_vocab.pkl") 
-      output = open(path, 'wb')
-      pickle.dump(vocab, output)
-      output.close()
-      
-    def yield_tokens(file_path):
-      file_path="/content/data/models2/M5/train.csv"
-      with io.open(file_path, encoding = 'utf-8') as f:
-        for line in f:
-          yield line.strip().split()
-      vocab = build_vocab_from_iterator(yield_tokens(file_path), specials=["<unk>"]) 
-      logger.info(vocab)  
-      print(vocab)
-      return vocab
-      
+  
 
     def compute_metrics(self, segments):
         """
