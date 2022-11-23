@@ -3,6 +3,8 @@ import torch
 import logging
 import csv
 import numpy as np
+import io
+from torchtext.vocab import build_vocab_from_iterator
 from sklearn.metrics import precision_recall_fscore_support, classification_report
 
 logger = logging.getLogger(__name__)
@@ -44,11 +46,28 @@ class BertTrainer:
 
         checkpoint = {
             "model": self.model.state_dict(),
-            "optimizer": self.optimizer.state_dict()
+            "optimizer": self.optimizer.state_dict(),
+            "vocab":self.text
         }
 
         logger.info("Saving checkpoint to %s", filename)
         torch.save(checkpoint, filename)
+        
+    def save_vocab(vocab, path):
+      outputpath="/content/output"
+      path=os.path.join(outputpath, "tag_vocab.pkl") 
+      output = open(path, 'wb')
+      pickle.dump(vocab, output)
+      output.close()
+      
+    def yield_tokens(file_path):
+       file_path="/content/data/models2/M5/train.csv"
+        with io.open(file_path, encoding = 'utf-8') as f:
+          for line in f:
+            yield line.strip().split()
+    vocab = build_vocab_from_iterator(yield_tokens(file_path), specials=["<unk>"])  
+    return vocab
+      
 
     def compute_metrics(self, segments):
         """
