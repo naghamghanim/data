@@ -61,12 +61,12 @@ class BertTrainer:
       output.close()
       
     def yield_tokens(file_path):
-       file_path="/content/data/models2/M5/train.csv"
-        with io.open(file_path, encoding = 'utf-8') as f:
-          for line in f:
-            yield line.strip().split()
-    vocab = build_vocab_from_iterator(yield_tokens(file_path), specials=["<unk>"])  
-    return vocab
+      file_path="/content/data/models2/M5/train.csv"
+      with io.open(file_path, encoding = 'utf-8') as f:
+        for line in f:
+          yield line.strip().split()
+      vocab = build_vocab_from_iterator(yield_tokens(file_path), specials=["<unk>"])  
+      return vocab
       
 
     def compute_metrics(self, segments):
