@@ -47,7 +47,7 @@ class BertTrainer:
         checkpoint = {
             "model": self.model.state_dict(),
             "optimizer": self.optimizer.state_dict(),
-            "vocab":self.text
+            
         }
 
         logger.info("Saving checkpoint to %s", filename)
@@ -65,7 +65,9 @@ class BertTrainer:
       with io.open(file_path, encoding = 'utf-8') as f:
         for line in f:
           yield line.strip().split()
-      vocab = build_vocab_from_iterator(yield_tokens(file_path), specials=["<unk>"])  
+      vocab = build_vocab_from_iterator(yield_tokens(file_path), specials=["<unk>"]) 
+      logger.info(vocab)  
+      print(vocab)
       return vocab
       
 
