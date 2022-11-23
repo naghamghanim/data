@@ -4,6 +4,7 @@ import logging
 import csv
 import numpy as np
 import io
+import pickle
 from torchtext.vocab import build_vocab_from_iterator
 from sklearn.metrics import precision_recall_fscore_support, classification_report
 
@@ -52,7 +53,7 @@ class BertTrainer:
         outputpath="/content/output"
         path=os.path.join(outputpath, "tag_vocab.pkl") 
         output = open(path, 'wb')
-        self.pickle.dump(vocab, output)
+        pickle.dump(vocab, output)
         output.close()    
 
     def save(self):
