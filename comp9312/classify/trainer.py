@@ -49,11 +49,14 @@ class BertTrainer:
         return vocab    
         
     def save_vocab(self):
+        voc=[]
         vocab=self.yield_tokens()
+        for i in vocab:
+           voc.append(i) 
         outputpath="/content/output"
         path=os.path.join(outputpath, "tag_vocab.pkl") 
         output = open(path, 'wb')
-        pickle.dump(vocab, output)
+        pickle.dump(voc, output)
         output.close()    
 
     def save(self):
