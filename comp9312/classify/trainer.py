@@ -43,7 +43,7 @@ class BertTrainer:
         with io.open(file_path, encoding = 'utf-8') as f:
             for line in f:
                 yield line.strip().split()
-        vocab = build_vocab_from_iterator(self.yield_tokens(), specials=["<unk>"]) 
+        vocab = build_vocab_from_iterator(self.yield_tokens(), specials=["cls","bos"]) 
         logger.info(vocab)  
         print(vocab)
         return vocab    
