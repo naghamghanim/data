@@ -109,13 +109,13 @@ def main(args):
     shuffle = (True, False, False)
     # CHANGE:
     # eval_dataloader only (return value)
-    eval_dataloader = [DataLoader(
-        dataset=dataset,
-        shuffle=shuffle[i],
+    eval_dataloader = DataLoader(
+        dataset=datasets[0],
+        shuffle=False,
         batch_size=args.batch_size,
         num_workers=args.num_workers,
         collate_fn=dataset.collate_fn,
-    ) for i, dataset in enumerate(datasets)]
+    )
 
     # Initialize the model
     # CHANGES:
