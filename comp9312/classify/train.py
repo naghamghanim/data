@@ -81,7 +81,7 @@ def main(args):
     datasets, vocab = parse_data_files((args.train_path, args.val_path, args.test_path))
 
     with open(os.path.join(args.output_path, "tag_vocab.pkl"), "wb") as fh:
-        pickle.dump(vocab.tags, fh)
+        pickle.dump(vocab.label, fh)
 
     # From the datasets generate the dataloaders
     datasets = [
