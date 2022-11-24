@@ -74,8 +74,8 @@ class BertTrainer:
 
         logger.info("Saving checkpoint to %s", filename)
         torch.save(checkpoint, filename)
-        self.save_vocab()
-
+        
+      
    
       
         

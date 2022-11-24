@@ -90,8 +90,8 @@ def main(args):
     # (args.train_path, )
     # datasets[0]
     # vocab is not important, ignore vocab variable
-    datasets, vocab = parse_data_files((args.eval_path))
     
+    datasets, vocab = parse_data_files((args.eval_path, ))
  
     # In eval.py
     with open(os.path.join(args.checkpoint_path, "tag_vocab.pkl"), "rb") as fh:
@@ -109,13 +109,13 @@ def main(args):
     shuffle = (True, False, False)
     # CHANGE:
     # eval_dataloader only (return value)
-    eval_dataloader = [DataLoader(
-        dataset=dataset,
-        shuffle=shuffle[i],
+    eval_dataloader = DataLoader(
+        dataset=datasets[0],
+        shuffle=False,
         batch_size=args.batch_size,
         num_workers=args.num_workers,
         collate_fn=dataset.collate_fn,
-    ) for i, dataset in enumerate(datasets)]
+    )
 
     # Initialize the model
     # CHANGES:

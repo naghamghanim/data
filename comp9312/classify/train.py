@@ -3,6 +3,7 @@ import os
 import argparse
 import logging
 import sys
+import pickle
 from torch.utils.data import DataLoader
 from comp9312.classify.model import BertClassifier
 from comp9312.classify.trainer import BertTrainer
@@ -78,6 +79,9 @@ def main(args):
 
     # Get the datasets and vocab for tags and tokens
     datasets, vocab = parse_data_files((args.train_path, args.val_path, args.test_path))
+
+    with open(os.path.join(args.output_path, "tag_vocab.pkl"), "wb") as fh:
+        pickle.dump(vocab, fh)
 
     # From the datasets generate the dataloaders
     datasets = [
