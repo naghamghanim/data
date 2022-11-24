@@ -132,7 +132,7 @@ def main(args):
     # checkpoint_path: path/to/model
     # Add args.checkpoint_path to the argparse
     device = None if torch.cuda.is_available() else torch.device('cpu')
-    checkpoint = torch.load(args.checkpoint_path, map_location=device)
+    checkpoint = torch.load(os.path.join(args.checkpoint _path, "model.pt"), map_location=device)
     model.load_state_dict(checkpoint["model"])
 
     if torch.cuda.is_available():
