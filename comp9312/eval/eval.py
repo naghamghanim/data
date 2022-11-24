@@ -158,8 +158,7 @@ def main(args):
     # - Remove max_epochs
     classifier = BertTrainer(
         model=model,
-       loss=loss,
-       eval_dataloader=eval_dataloader,
+        loss=loss,
         output_path=args.output_path,
     )
 
