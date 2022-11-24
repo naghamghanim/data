@@ -114,7 +114,7 @@ def main(args):
         shuffle=False,
         batch_size=args.batch_size,
         num_workers=args.num_workers,
-        collate_fn=dataset[0].collate_fn,
+        collate_fn=datasets[0].collate_fn,
     )
 
     # Initialize the model
