@@ -79,6 +79,9 @@ def main(args):
     # Get the datasets and vocab for tags and tokens
     datasets, vocab = parse_data_files((args.train_path, args.val_path, args.test_path))
 
+    with open("tag_vocab.pkl", "wb") as fh:
+        pickle.dump(vocab.tags, fh)
+
     # From the datasets generate the dataloaders
     datasets = [
         DefaultDataset(
