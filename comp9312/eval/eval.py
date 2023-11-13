@@ -5,10 +5,10 @@ import logging
 import sys
 import pickle
 from torch.utils.data import DataLoader
-from model import BertClassifier
-from trainer import BertTrainer
-from utils import parse_data_files, set_seed
-from datatest import DefaultDataset
+from comp9312.classify.model import BertClassifier
+from comp9312.classify.trainer import BertTrainer
+from comp9312.classify.utils import parse_data_files, set_seed
+from comp9312.classify.data import DefaultDataset
 
 
 def parse_args():
@@ -120,40 +120,27 @@ def main(args):
     # Init model from checkpoint
     # checkpoint_path: path/to/model
     # Add args.checkpoint_path to the argparse
+    
+    
     device = None if torch.cuda.is_available() else torch.device('cpu')
-    #checkpoint = torch.load(os.path.join(args.checkpoint_path, "model.pt"), map_location=device)
-    #model.load_state_dict(checkpoint["model"], strict=False)
+    checkpoint = torch.load(os.path.join(args.checkpoint_path, "model.pt"), map_location=device)
+    model.load_state_dict(checkpoint["model"])
   #############################################################################################  
-    model = BertClassifier(
-        bert_model=args.bert_model, num_labels=len(vocab), dropout=0.1
-    )
 
+##############################################################################################
     if torch.cuda.is_available():
         os.environ["CUDA_VISIBLE_DEVICES"] = ",".join(
             [str(gpu) for gpu in range(len(args.gpus))]
         )
-        model = torch.nn.DataParallel(model, device_ids=range(len(args.gpus)))
-        model = model.cuda()
-
-    # Initialize the optimizer
-    optimizer = torch.optim.AdamW(lr=args.learning_rate, params=model.parameters())
-
-    # Initialize the loss function
-    loss = torch.nn.CrossEntropyLoss()
-    ##############################################################################################
-    #if torch.cuda.is_available():
-     #   os.environ["CUDA_VISIBLE_DEVICES"] = ",".join(
-     #       [str(gpu) for gpu in range(len(args.gpus))]
-     #   )
-     #   model = torch.nn.DataParallel(model, device_ids=range(len(args.gpus)))
-     #   model = model.cuda()
+    model = torch.nn.DataParallel(model, device_ids=range(len(args.gpus)))
+    model = model.cuda()
 
     # Initialize the optimizer
     # REMOVE
    # optimizer = torch.optim.AdamW(lr=args.learning_rate, params=model.parameters())
 
     # Initialize the loss function
-   # loss = torch.nn.CrossEntropyLoss()
+    loss = torch.nn.CrossEntropyLoss()
 #################################################################################
     # Initialize the trainer
     # Update:
