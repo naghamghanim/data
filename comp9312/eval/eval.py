@@ -124,8 +124,12 @@ def main(args):
     
     device = None if torch.cuda.is_available() else torch.device('cpu')
     checkpoint = torch.load(os.path.join(args.checkpoint_path, "model.pt"), map_location=device)
-    model.load_state_dict(checkpoint["model"])
+    model.load_state_dict(checkpoint["model"],strict=False)
     
+    
+  #############################################################################################  
+
+    ##############################################################################################
     if torch.cuda.is_available():
         os.environ["CUDA_VISIBLE_DEVICES"] = ",".join(
             [str(gpu) for gpu in range(len(args.gpus))]
