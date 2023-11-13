@@ -112,9 +112,9 @@ def main(args):
     # - Make sure you are passing the right args.bert_model
     # - Load vocabs (we need to save vocab during training)
     # - In train.py
-    model = BertClassifier(
-        bert_model=args.bert_model, num_labels=len(vocab)
-    )
+    #model = BertClassifier(
+     #   bert_model=args.bert_model, num_labels=len(vocab)
+    #)
 
     # ADD:
     # Init model from checkpoint
@@ -124,7 +124,7 @@ def main(args):
     #checkpoint = torch.load(os.path.join(args.checkpoint_path, "model.pt"), map_location=device)
     #model.load_state_dict(checkpoint["model"], strict=False)
   #############################################################################################  
-        model = BertClassifier(
+    model = BertClassifier(
         bert_model=args.bert_model, num_labels=len(vocab), dropout=0.1
     )
 
