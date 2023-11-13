@@ -5,10 +5,10 @@ import logging
 import sys
 import pickle
 from torch.utils.data import DataLoader
-from comp9312.classify.model import BertClassifier
-from comp9312.classify.trainer import BertTrainer
-from comp9312.classify.utils import parse_data_files, set_seed
-from comp9312.classify.data import DefaultDataset
+from model import BertClassifier
+from trainer import BertTrainer
+from utils import parse_data_files, set_seed
+from datatest import DefaultDataset
 
 
 def parse_args():
@@ -18,17 +18,6 @@ def parse_args():
         "--output_path", type=str, required=True, help="Output path",
     )
 
-    parser.add_argument(
-        "--train_path", type=str, required=True, help="Path to training data",
-    )
-
-    parser.add_argument(
-        "--val_path", type=str, required=True, help="Path to training data",
-    )
-
-    parser.add_argument(
-        "--test_path", type=str, required=True, help="Path to training data",
-    )
     parser.add_argument(
         "--eval_path", type=str, required=True, help="Path to eval data",
     )
@@ -90,13 +79,13 @@ def main(args):
     # (args.train_path, )
     # datasets[0]
     # vocab is not important, ignore vocab variable
-    
+
     datasets, vocab = parse_data_files((args.eval_path, ))
- 
+
     # In eval.py
     with open(os.path.join(args.checkpoint_path, "tag_vocab.pkl"), "rb") as fh:
         vocab = pickle.load(fh)
-        
+
     # From the datasets generate the dataloaders
     # we only care about datasets[0]
     datasets = [
@@ -132,8 +121,12 @@ def main(args):
     # checkpoint_path: path/to/model
     # Add args.checkpoint_path to the argparse
     device = None if torch.cuda.is_available() else torch.device('cpu')
-    checkpoint = torch.load(os.path.join(args.checkpoint_path, "model.pt"), map_location=device)
-    model.load_state_dict(checkpoint["model"], strict=False)
+    #checkpoint = torch.load(os.path.join(args.checkpoint_path, "model.pt"), map_location=device)
+    #model.load_state_dict(checkpoint["model"], strict=False)
+  #############################################################################################  
+        model = BertClassifier(
+        bert_model=args.bert_model, num_labels=len(vocab), dropout=0.1
+    )
 
     if torch.cuda.is_available():
         os.environ["CUDA_VISIBLE_DEVICES"] = ",".join(
@@ -143,12 +136,25 @@ def main(args):
         model = model.cuda()
 
     # Initialize the optimizer
+    optimizer = torch.optim.AdamW(lr=args.learning_rate, params=model.parameters())
+
+    # Initialize the loss function
+    loss = torch.nn.CrossEntropyLoss()
+    ##############################################################################################
+    #if torch.cuda.is_available():
+     #   os.environ["CUDA_VISIBLE_DEVICES"] = ",".join(
+     #       [str(gpu) for gpu in range(len(args.gpus))]
+     #   )
+     #   model = torch.nn.DataParallel(model, device_ids=range(len(args.gpus)))
+     #   model = model.cuda()
+
+    # Initialize the optimizer
     # REMOVE
    # optimizer = torch.optim.AdamW(lr=args.learning_rate, params=model.parameters())
 
     # Initialize the loss function
-    loss = torch.nn.CrossEntropyLoss()
-
+   # loss = torch.nn.CrossEntropyLoss()
+#################################################################################
     # Initialize the trainer
     # Update:
     # - Remove optimizer
@@ -167,7 +173,7 @@ def main(args):
 
     # ADD:
     segments, _ = classifier.eval(eval_dataloader)
-    classifier.save_predictions(segments, "predictions.csv")
+    classifier.save_predictions(segments, "predictions1.csv")
 
     # ADD:
     classifier.compute_metrics(segments)
