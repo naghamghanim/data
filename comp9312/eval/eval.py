@@ -112,9 +112,9 @@ def main(args):
     # - Make sure you are passing the right args.bert_model
     # - Load vocabs (we need to save vocab during training)
     # - In train.py
-    #model = BertClassifier(
-     #   bert_model=args.bert_model, num_labels=len(vocab)
-    #)
+    model = BertClassifier(
+        bert_model=args.bert_model, num_labels=len(vocab)
+    )
 
     # ADD:
     # Init model from checkpoint
@@ -127,7 +127,7 @@ def main(args):
     model.load_state_dict(checkpoint["model"])
   #############################################################################################  
 
-##############################################################################################
+    ##############################################################################################
     if torch.cuda.is_available():
         os.environ["CUDA_VISIBLE_DEVICES"] = ",".join(
             [str(gpu) for gpu in range(len(args.gpus))]
