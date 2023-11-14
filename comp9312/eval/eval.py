@@ -10,7 +10,6 @@ from comp9312.classify.trainer import BertTrainer
 from comp9312.classify.utils import parse_data_files, set_seed
 from comp9312.classify.data import DefaultDataset
 
-
 def parse_args():
     parser = argparse.ArgumentParser()
 
@@ -82,6 +81,7 @@ def main(args):
 
     datasets, vocab = parse_data_files((args.eval_path, ))
 
+    
     # In eval.py
     with open(os.path.join(args.checkpoint_path, "tag_vocab.pkl"), "rb") as fh:
         vocab = pickle.load(fh)
@@ -123,13 +123,9 @@ def main(args):
     
     
     device = None if torch.cuda.is_available() else torch.device('cpu')
-    checkpoint = torch.load(os.path.join(args.checkpoint_path, "model.pt"), map_location=device)
-    model.load_state_dict(checkpoint["model"])
-    
-    
-  #############################################################################################  
+    checkpoint = torch.load(open(os.path.join(args.checkpoint_path, "model.pt"), "rb"), map_location=device)
+    model.load_state_dict(checkpoint["model"],strict=False)
 
-    ##############################################################################################
     if torch.cuda.is_available():
         os.environ["CUDA_VISIBLE_DEVICES"] = ",".join(
             [str(gpu) for gpu in range(len(args.gpus))]
